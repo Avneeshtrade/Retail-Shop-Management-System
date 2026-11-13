@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: retail-shop
+  datasource:
+    url: jdbc:h2:file:./data/retailshop;AUTO_SERVER=TRUE
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: true
+    properties:
+      hibernate.format_sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jackson:
+    default-property-inclusion: non_null
+
+app:
+  jwt:
+    # Override in production with an env var: APP_JWT_SECRET (>= 32 chars)
+    secret: ${APP_JWT_SECRET:change-me-this-is-a-dev-only-secret-key-at-least-32-bytes}
+    expiration-minutes: 720
+  cors:
+    allowed-origins: ${APP_CORS_ORIGINS:http://localhost:5173}
+  seed-demo-data: ${APP_SEED_DEMO_DATA:true}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/retailshop}
+    username: ${DB_USERNAME:retail}
+    password: ${DB_PASSWORD:retail}
+  h2:
+    console:
+      enabled: false
